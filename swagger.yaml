@@ -1,0 +1,450 @@
+swagger: "2.0"
+info:
+  description: "Task Manager API description text is here."
+  version: "1.0.0"
+  title: "Swagger Task Manager"
+  contact:
+    email: "f0816021@std.yildiz.edu.tr"
+host: "serdarusta-task-manager.herokuapp.com"
+basePath: "/"
+tags:
+- name: "users"
+  description: "Users who authorized to use this API"
+- name: "tasks"
+  description: "Tasks that users can create, read, update or delete"
+schemes:
+- "https"
+- "http"
+paths:
+  /tasks:
+    get:
+      tags:
+      - "tasks"
+      summary: "Returns tasks by logged in user"
+      description: "Returns array of tasks"
+      operationId: "getUserTasks"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "limit"
+        description: "item per page"
+        required: false
+        type: "integer"
+      - in: "query"
+        name: "skip"
+        description: "page number"
+        required: false
+        type: "integer"
+      - in: "query"
+        name: "sortBy"
+        description: "sort by property"
+        required: false
+        type: "string"
+      - in: "query"
+        name: "completed"
+        description: "filtered by completed property"
+        required: false
+        type: "boolean"
+      - in: "query"
+        name: "description"
+        description: "filtered by description property"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            additionalProperties:
+              type: "integer"
+              format: "int32"
+        500:
+          description: "Internal Server Error"
+      security:
+        - apiKey: []
+    post:
+      tags:
+      - "tasks"
+      summary: ""
+      description: ""
+      operationId: ""
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "request body"
+        required: true
+        schema:
+          $ref: "#/definitions/Users"
+      responses:
+        201:
+          description: "successful operation"
+        400:
+          description: "Bad request"
+      security:
+        - apiKey: []
+  /tasks/{taskId}:
+    get:
+      tags:
+      - "tasks"
+      summary: "Get specific task"
+      description: ""
+      operationId: "taskById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "taskId"
+        in: "path"
+        description: "ID of task to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+        400:
+          description: "Invalid Task"
+      security:
+        - apiKey: []
+    patch:
+      tags:
+      - "tasks"
+      summary: "Update specific task"
+      description: ""
+      operationId: "updateTaskById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "taskId"
+        in: "path"
+        description: "ID of task to update"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+        404:
+          description: "task not found"
+        400:
+          description: "Invalid task"
+      security:
+        - apiKey: []
+    delete:
+      tags:
+      - "tasks"
+      summary: "Delete specific task"
+      description: ""
+      operationId: "deleteTaskById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "taskId"
+        in: "path"
+        description: "ID of task to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+        404:
+          description: "task not found"
+        500:
+          description: "Internal server error"
+      security:
+        - apiKey: []
+  /users:
+    post:
+      tags:
+      - "users"
+      summary: "Signup as a new user"
+      description: ""
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/Users"
+      responses:
+        201:
+          description: "created"
+        400:
+          description: "Bad request"
+    get:
+      tags:
+      - "users"
+      summary: "Get all users"
+      description: "Get all signed up users"
+      operationId: "getAllUser"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "fetched"
+        500:
+          description: "Internal server error"
+      security:
+        - apiKey: []
+  /users/login:
+    post:
+      tags:
+      - "users"
+      summary: "Login"
+      description: ""
+      operationId: "login"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Login user"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        200:
+          description: "successfully logged in"
+        400:
+          description: "bad request"
+  /users/logout:
+    post:
+      tags:
+      - "users"
+      summary: "Logout"
+      description: ""
+      operationId: "logout"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successfully logged out"
+        500:
+          description: "Internal server error"
+      security:
+        - apiKey: []
+  /users/logoutAll:
+    post:
+      tags:
+      - "users"
+      summary: "Logout all"
+      description: "logout from all sessions"
+      operationId: "logoutAll"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successfully logged out from all sessions"
+        500:
+          description: "Internal server error"
+      security:
+        - apiKey: []
+  /users/me:
+    get:
+      tags:
+      - "users"
+      summary: "Get my profile"
+      description: ""
+      operationId: "me"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successfully get profile"
+      security:
+        - apiKey: []
+    patch:
+      tags:
+      - "users"
+      summary: "Update my profile"
+      description: ""
+      operationId: "updateMe"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "update user"
+        required: true
+        schema:
+          $ref: "#/definitions/Users"
+      responses:
+        200:
+          description: "successfully get profile"
+        400:
+          description: "failed to update profile"
+      security:
+        - apiKey: []
+    delete:
+      tags:
+      - "users"
+      summary: "Delete my account"
+      description: ""
+      operationId: "deleteMe"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "delete user"
+        required: true
+        schema:
+          $ref: "#/definitions/Users"
+      responses:
+        200:
+          description: "successfully delete profile"
+        500:
+          description: "failed to delete profile"
+      security:
+        - apiKey: []
+  /users/me/avatar:
+    post:
+      tags:
+      - "users"
+      summary: "Add profile picture to my profile"
+      description: ""
+      operationId: "addAvatar"
+      produces:
+      - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "update avatar"
+          required: true
+          schema:
+            $ref: "#/definitions/Users"
+      responses:
+        200:
+          description: "successfully add profile picture"
+        500:
+          description: "Internal server error"
+      security:
+        - apiKey: []
+    delete:
+      tags:
+      - "users"
+      summary: "Delete my avatar"
+      description: ""
+      operationId: "deleteMyAvatar"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "delete user avatar"
+        required: true
+        schema:
+          $ref: "#/definitions/Users"
+      responses:
+        200:
+          description: "successfully delete profile picture"
+        500:
+          description: "failed to delete profile picture"
+      security:
+        - apiKey: []
+  /users/{id}:
+    get:
+      tags:
+      - "users"
+      summary: "Get user"
+      description: ""
+      operationId: "getUserById"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "user Id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "succesfully fetch user"
+        404:
+          description: "User not found"
+        500:
+          description: "Internal server error"
+      security:
+        - apiKey: []
+  /users/{id}/avatar:
+    get:
+      tags:
+      - "users"
+      summary: "Get user profile picture"
+      description: ""
+      operationId: "getAvatarByUserId"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "user Id"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "succesfully fetch user avatar"
+        404:
+          description: "User or avatar not found"
+securityDefinitions:
+  apiKey:
+    type: "apiKey"
+    name: "authToken"
+    in: "header"
+definitions:
+  Login:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+  Users:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      age:
+        type: "integer"
+        format: "int64"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      avatar:
+        type: "string"
+        format: "binary"
+        description: "Profile Photo"
+      createdAt:
+        type: "string"
+        format: "date-time"
+      updatedAt:
+        type: "string"
+        format: "date-time"
+      tokens:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            _id:
+              type: "string"
+            token:
+              type: "string"
+  Task:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      description:
+        type: "string"
+      completed:
+        type: "boolean"
+      owner:
+        $ref: "#/definitions/Users"
